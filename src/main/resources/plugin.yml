@@ -1,0 +1,20 @@
+name: smashcraft
+version: '1.0-SNAPSHOT'
+main: org.kobokorp.smashcraft.Smashcraft
+api-version: '1.21'
+commands:
+  start:
+    description: Start a Smashcraft game
+    usage: /start <mapname>
+
+  smashtest:
+    description: "Applies test damage and knockback to yourself"
+    usage: /smashtest <percent>
+
+  smashsetdamage:
+    description: "Set or reset your damage to a specific percentage"
+    usage: /smashsetdamage <percent>
+  
+  chooseitems:
+    description: Opens the custom item selection GUI
+    usage: /chooseitems

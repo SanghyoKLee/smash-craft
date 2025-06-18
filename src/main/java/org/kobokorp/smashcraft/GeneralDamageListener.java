@@ -1,0 +1,88 @@
+package org.kobokorp.smashcraft;
+
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.util.Vector;
+
+import java.util.UUID;
+
+public class GeneralDamageListener implements Listener {
+
+    private final DamageManager damageManager;
+    private final DisplayUpdater displayUpdater;
+
+    public GeneralDamageListener(DamageManager manager, DisplayUpdater updater) {
+        this.damageManager = manager;
+        this.displayUpdater = updater;
+    }
+
+    @EventHandler
+    public void onAnyDamage(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) return;
+
+        double damage = switch (event.getCause()) {
+            case FALL, POISON -> 4;
+            case FIRE, FIRE_TICK -> 2;
+            case LAVA -> 5;
+            case BLOCK_EXPLOSION, ENTITY_EXPLOSION -> 15;
+            case MAGIC -> 6;
+            case THORNS -> 3;
+            default -> 1;
+        };
+
+        damageManager.addDamage(player.getUniqueId(), damage);
+        displayUpdater.update(player);
+
+        if (event.getCause() != EntityDamageEvent.DamageCause.POISON) {
+            double percent = damageManager.getDamage(player.getUniqueId());
+            Vector knockback = new Vector(0, 0.5 + percent / 150.0, 0);
+            player.setVelocity(knockback);
+        }
+
+        player.sendMessage("Damage taken: +" + damage + "% → Total: " + displayUpdater.damageManager.getFormattedDamage(player.getUniqueId()));
+        event.setDamage(0);
+    }
+
+    @EventHandler
+    public void onTntDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (!(event.getDamager() instanceof TNTPrimed tnt)) return;
+        if (!tnt.hasMetadata("smashcraft_tnt")) return;
+
+        event.setCancelled(true);
+
+        UUID shooter = UUID.fromString(tnt.getMetadata("smashcraft_tnt").get(0).asString());
+
+        double customDamage = 8;
+        damageManager.addDamage(player.getUniqueId(), customDamage);
+        displayUpdater.update(player);
+
+        double percent = damageManager.getDamage(player.getUniqueId());
+        Vector knockback = player.getLocation().toVector().subtract(tnt.getLocation().toVector()).normalize();
+        knockback.setY(0.5 + percent / 150.0);
+
+        player.setVelocity(knockback);
+        player.sendMessage("Damage taken: +" + customDamage + "% → Total: " + displayUpdater.damageManager.getFormattedDamage(player.getUniqueId()));
+    }
+
+    public class TntExplosionListener implements Listener {
+
+        @EventHandler
+        public void onTntExplode(EntityExplodeEvent event) {
+            if (!(event.getEntity() instanceof TNTPrimed tnt)) return;
+            if (!tnt.hasMetadata("smashcraft_tnt")) return;
+
+            // Prevent all block damage
+            event.blockList().clear();
+        }
+    }
+}
+
+
