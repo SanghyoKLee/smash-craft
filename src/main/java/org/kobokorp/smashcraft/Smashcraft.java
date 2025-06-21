@@ -1,13 +1,9 @@
 package org.kobokorp.smashcraft;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kobokorp.smashcraft.customitem.*;
 import org.kobokorp.smashcraft.shield.ShieldManager;
-
-import java.util.List;
 
 public final class Smashcraft extends JavaPlugin {
 
@@ -46,7 +42,7 @@ public final class Smashcraft extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new TripleJumpListener(this), this);
         getServer().getPluginManager().registerEvents(new HungerListener(), this);
         getServer().getPluginManager().registerEvents(damageListener, this); // ✅ Reuse your created instance
-        getServer().getPluginManager().registerEvents(new GeneralDamageListener(damageManager, displayUpdater), this);
+        getServer().getPluginManager().registerEvents(new GeneralDamageListener(damageManager, displayUpdater, shieldManager), this);
         Bukkit.getPluginManager().registerEvents(new ItemRightClickListener(customItemManager, cooldownManager), this);
         getServer().getPluginManager().registerEvents(new CustomItemSelectorGUI(customItemManager, playerItemLoadoutManager, this), this);
         getServer().getPluginManager().registerEvents(new TntExplosionListener(), this);
@@ -64,12 +60,10 @@ public final class Smashcraft extends JavaPlugin {
         getCommand("chooseitems").setExecutor(new ChooseItemsCommand(customItemManager, playerItemLoadoutManager, this));
         getCommand("start").setExecutor(new GameCommand(gameManager));
 
-        World world = Bukkit.getWorld("world");
         getServer().getPluginManager().registerEvents(new GameListener(gameManager), this);
-        MapManager.registerMap("world", List.of(
-                new Location(world, -201, 96, -23)
-
-        ));
+        saveDefaultConfig(); // ensures plugin folder exists
+        saveResource("config.yml", false); // ensure it's copied to plugin folder
+        MapManager.loadMaps(this); // load map data
     }
 
 

@@ -4,7 +4,6 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class GameManager {
     private final Smashcraft plugin;
@@ -23,35 +22,30 @@ public class GameManager {
     }
 
     public void startGame(String mapName) {
-        Bukkit.getLogger().info("Start command called with: " + mapName);
-
-        World world = Bukkit.getWorld("world");
-        List<Location> spawns = MapManager.getSpawns(mapName);
-        if (spawns == null || spawns.isEmpty()) {
-            Bukkit.broadcastMessage(ChatColor.RED + "Failed to start game: no spawns found.");
+        MapData map = MapManager.getMap(mapName);
+        if (map == null || map.getSpawnPoints().isEmpty()) {
+            Bukkit.broadcastMessage(ChatColor.RED + "Map not found or has no spawn points.");
             return;
         }
-        currentMap = mapName;
-        gameRunning = true;
-        List<Player> players = Bukkit.getOnlinePlayers().stream()
-                .map(p -> (Player) p)
-                .collect(Collectors.toList());
 
+        playerLives.clear();
+        activePlayers.clear();
+        invulnerablePlayers.clear();
+        gameRunning = true;
+        currentMap = mapName;
+
+        List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 
         for (int i = 0; i < players.size(); i++) {
             Player p = players.get(i);
             UUID id = p.getUniqueId();
 
-            // Reset lives and state
             playerLives.put(id, 3);
             activePlayers.add(id);
             p.setGameMode(GameMode.ADVENTURE);
-
-            // ✅ Reset damage and update scoreboard
             damageManager.resetDamage(id);
             displayUpdater.update(p);
-
-            teleportAndInvuln(p, spawns.get(i % spawns.size()));
+            teleportAndInvuln(p, map.getSpawnPoints().get(i % map.getSpawnPoints().size()));
         }
 
         Bukkit.broadcastMessage(ChatColor.GREEN + "Game started on " + mapName + "!");
@@ -62,22 +56,26 @@ public class GameManager {
 
         int lives = playerLives.getOrDefault(player.getUniqueId(), 0) - 1;
         playerLives.put(player.getUniqueId(), lives);
+        MapData map = MapManager.getMap(currentMap);
 
         if (lives <= 0) {
             activePlayers.remove(player.getUniqueId());
             player.setGameMode(GameMode.SPECTATOR);
             player.sendMessage(ChatColor.RED + "You're out!");
             checkWinCondition();
-
-            List<Location> spawns = MapManager.getSpawns(currentMap);
+            List<Location> spawns = map.getSpawnPoints();
             if (spawns != null && !spawns.isEmpty()) {
-                player.teleport(spawns.get(0)); // or any designated spectator spot
+                player.teleport(map.getSpawnPoints().get(0));
             }
         } else {
             damageManager.resetDamage(player.getUniqueId());
             displayUpdater.update(player);
 
-            teleportAndInvuln(player, MapManager.getRandomSpawn(currentMap));
+            map.getRandomSpawn();
+            if (map != null) {
+                teleportAndInvuln(player, map.getRandomSpawn());
+            }
+            
             player.sendMessage(ChatColor.YELLOW + "You have " + lives + " lives left!");
         }
     }
@@ -104,5 +102,9 @@ public class GameManager {
             }
             gameRunning = false;
         }
+    }
+
+    public String getCurrentMap() {
+        return currentMap;
     }
 }

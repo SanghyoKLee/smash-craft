@@ -1,0 +1,23 @@
+maps:
+  battlefield:
+    deathY: 72
+    spawns:
+      - x: -200.5
+        y: 120
+        z: -20.5
+      - x: -195.5
+        y: 50
+        z: -20.5
+      - x: -190.5
+        y: 95
+        z: -20.5
+
+  tower:
+    deathY: 60
+    spawns:
+      - x: 100.5
+        y: 85
+        z: 100.5
+      - x: 105.5
+        y: 85
+        z: 100.5

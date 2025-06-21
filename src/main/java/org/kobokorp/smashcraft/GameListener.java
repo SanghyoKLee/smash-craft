@@ -25,7 +25,14 @@ public class GameListener implements Listener {
     @EventHandler
     public void onPlayerFall(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (player.getLocation().getY() < 74) {
+
+        // Avoid NPE if no game is running yet
+        if (gameManager.getCurrentMap() == null) return;
+
+        MapData map = MapManager.getMap(gameManager.getCurrentMap());
+        if (map == null) return;
+
+        if (player.getLocation().getY() < map.getDeathY()) {
             gameManager.handleFall(player);
         }
     }

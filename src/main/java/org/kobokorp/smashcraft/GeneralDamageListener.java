@@ -1,5 +1,6 @@
 package org.kobokorp.smashcraft;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
@@ -8,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.util.Vector;
+import org.kobokorp.smashcraft.shield.ShieldManager;
 
 import java.util.UUID;
 
@@ -15,19 +17,41 @@ public class GeneralDamageListener implements Listener {
 
     private final DamageManager damageManager;
     private final DisplayUpdater displayUpdater;
+    private final ShieldManager shieldManager;
 
-    public GeneralDamageListener(DamageManager manager, DisplayUpdater updater) {
+    public GeneralDamageListener(DamageManager manager, DisplayUpdater updater, ShieldManager shieldManager) {
         this.damageManager = manager;
         this.displayUpdater = updater;
+        this.shieldManager = shieldManager;
     }
 
     @EventHandler
     public void onAnyDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
 
-        if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) return;
+        // Ignore melee attacks handled elsewhere
+        if (event instanceof EntityDamageByEntityEvent) return;
 
-        double damage = switch (event.getCause()) {
+        EntityDamageEvent.DamageCause cause = event.getCause();
+        UUID playerId = player.getUniqueId();
+
+        boolean isExplosion = cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION ||
+                cause == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION;
+
+        boolean isBypassShield = cause == EntityDamageEvent.DamageCause.FIRE ||
+                cause == EntityDamageEvent.DamageCause.FIRE_TICK ||
+                cause == EntityDamageEvent.DamageCause.POISON ||
+                isExplosion;
+
+        // Cancel if shielding and damage shouldn't bypass
+        if (shieldManager.isShielding(playerId) && !isBypassShield) {
+            event.setCancelled(true);
+            player.sendMessage(ChatColor.BLUE + "Shield blocked the attack!");
+            return;
+        }
+
+        // Damage values
+        double damage = switch (cause) {
             case FALL, POISON -> 4;
             case FIRE, FIRE_TICK -> 2;
             case LAVA -> 5;
@@ -37,16 +61,23 @@ public class GeneralDamageListener implements Listener {
             default -> 1;
         };
 
-        damageManager.addDamage(player.getUniqueId(), damage);
+        // Apply damage
+        damageManager.addDamage(playerId, damage);
         displayUpdater.update(player);
 
-        if (event.getCause() != EntityDamageEvent.DamageCause.POISON) {
-            double percent = damageManager.getDamage(player.getUniqueId());
+        // Knockback logic
+        if (!cause.equals(EntityDamageEvent.DamageCause.POISON) &&
+                !cause.equals(EntityDamageEvent.DamageCause.FIRE) &&
+                !cause.equals(EntityDamageEvent.DamageCause.FIRE_TICK)) {
+
+            double percent = damageManager.getDamage(playerId);
             Vector knockback = new Vector(0, 0.5 + percent / 150.0, 0);
             player.setVelocity(knockback);
         }
 
-        player.sendMessage("Damage taken: +" + damage + "% → Total: " + displayUpdater.damageManager.getFormattedDamage(player.getUniqueId()));
+        player.sendMessage("Damage taken: +" + damage + "% → Total: " +
+                displayUpdater.damageManager.getFormattedDamage(playerId));
+
         event.setDamage(0);
     }
 
