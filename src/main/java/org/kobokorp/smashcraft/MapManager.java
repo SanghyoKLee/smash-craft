@@ -37,7 +37,10 @@ public class MapManager {
                 double x = ((Number) spawn.get("x")).doubleValue();
                 double y = ((Number) spawn.get("y")).doubleValue();
                 double z = ((Number) spawn.get("z")).doubleValue();
-                spawns.add(new Location(world, x, y, z));
+                float yaw = spawn.containsKey("yaw") ? ((Number) spawn.get("yaw")).floatValue() : 0f;
+                float pitch = spawn.containsKey("pitch") ? ((Number) spawn.get("pitch")).floatValue() : 0f;
+
+                spawns.add(new Location(world, x, y, z, yaw, pitch));
             }
 
             maps.put(mapName.toLowerCase(), new MapData(mapName, deathY, spawns));
