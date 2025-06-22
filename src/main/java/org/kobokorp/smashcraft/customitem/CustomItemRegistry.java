@@ -11,5 +11,6 @@ public class CustomItemRegistry {
         manager.register(new TnTLauncher(cooldownManager));
         manager.register(new SplinterShot(cooldownManager));
         manager.register(new AncientStoneSword(cooldownManager));
+        manager.register(new Nightfall(cooldownManager));
     }
 }

@@ -1,13 +1,12 @@
 package org.kobokorp.smashcraft;
 
 import org.bukkit.*;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -74,6 +73,7 @@ public class DamageListener implements Listener {
                     case DIAMOND_AXE -> 15;
                     case NETHERITE_SWORD -> 12;
                     case NETHERITE_AXE -> 18;
+                    case MACE -> 20;
                     default -> 2;
                 };
             }
@@ -171,4 +171,78 @@ public class DamageListener implements Listener {
         rock.remove();
         victim.sendMessage(ChatColor.DARK_GRAY + "You've been hit by a Stone Slam!");
     }
+
+    @EventHandler
+    public void onNightfallLand(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+
+        // Not using Nightfall — ignore
+        if (!player.hasMetadata("using_nightfall")) return;
+
+        // Already on the ground or inside a vehicle — ignore
+        if (player.isOnGround() || player.isInsideVehicle()) {
+            // Check if they were just in the air
+            if (!(player.getFallDistance() > 0)) return;
+
+            // Remove the metadata to prevent retriggering
+            player.removeMetadata("using_nightfall", plugin);
+
+            // Trigger slam effect
+            Location loc = player.getLocation();
+            double radius = 6.0;
+
+            for (Entity entity : loc.getWorld().getNearbyEntities(loc, radius, radius, radius)) {
+                if (!(entity instanceof LivingEntity target)) continue;
+                if (target.equals(player)) continue;
+
+                if (target instanceof Player targetPlayer) {
+                    if (shieldManager.isShielding(targetPlayer.getUniqueId())) {
+                        targetPlayer.sendMessage(ChatColor.BLUE + "Blocked Nightfall with shield!");
+                        continue;
+                    }
+
+                    this.applySmashKnockback(loc, player, targetPlayer, 35.0);
+                } else {
+                    target.damage(7.0, player);
+
+                    Vector knockback = target.getLocation().toVector()
+                            .subtract(player.getLocation().toVector())
+                            .setY(0)
+                            .normalize()
+                            .multiply(1.1);
+                    knockback.setY(0.6);
+
+                    target.setVelocity(knockback.add(new Vector(0, 0.2, 0)));
+
+                    target.getWorld().playSound(target.getLocation(), Sound.ENTITY_GENERIC_HURT, 1f, 1f);
+                    target.getWorld().spawnParticle(
+                            Particle.DAMAGE_INDICATOR,
+                            target.getLocation().add(0, 1, 0),
+                            10, 0.3, 0.3, 0.3, 0.1
+                    );
+                }
+            }
+
+            Location center = player.getLocation();
+            World world = center.getWorld();
+
+            // Fill circle by iterating over x and z offsets
+            for (double x = -radius; x <= radius; x += 0.5) {
+                for (double z = -radius; z <= radius; z += 0.5) {
+                    if (x * x + z * z <= radius * radius) {
+                        Location particleLoc = center.clone().add(x, 0.1, z);
+                        world.spawnParticle(
+                                Particle.BLOCK,
+                                particleLoc,
+                                2, // number of particles per spot
+                                0.2, 0.1, 0.2, // spread for variation
+                                Material.DEEPSLATE.createBlockData()
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+
 }
