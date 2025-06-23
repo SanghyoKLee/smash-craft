@@ -97,4 +97,8 @@ public class TripleJumpListener implements Listener {
     private boolean isInValidGameMode(Player player) {
         return player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE;
     }
+
+    public int getUsedJumps(Player player) {
+        return jumpCounts.getOrDefault(player.getUniqueId(), 0);
+    }
 }

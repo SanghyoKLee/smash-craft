@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 import org.kobokorp.smashcraft.Smashcraft;
+import org.kobokorp.smashcraft.TripleJumpListener;
 import org.kobokorp.smashcraft.customitem.CooldownManager;
 import org.kobokorp.smashcraft.customitem.CustomItem;
 import org.kobokorp.smashcraft.customitem.CustomItemType;
@@ -24,10 +25,13 @@ public class Nightfall implements CustomItem {
     private final Material material = Material.MACE;
     private final Set<CustomItemType> customItemTypes = Set.of(CustomItemType.PRIMARY);
     private final long cooldown = 15;
+    private final TripleJumpListener tripleJumpListener;
 
-    public Nightfall(CooldownManager manager) {
+    public Nightfall(CooldownManager manager, TripleJumpListener tripleJumpListener) {
         this.cooldownManager = manager;
+        this.tripleJumpListener = tripleJumpListener;
     }
+
 
     @Override
     public String getName() {
@@ -40,6 +44,9 @@ public class Nightfall implements CustomItem {
                 material,
                 name,
                 List.of(
+                        ChatColor.WHITE + "Charged damage: " + ChatColor.RED + "15%",
+                        ChatColor.WHITE + "Uncharged damage: " + ChatColor.RED + "2%",
+                        ChatColor.WHITE + " ",
                         ChatColor.WHITE + "Slam downward from the air.",
                         ChatColor.WHITE + "Deals " + ChatColor.RED + "35%" + ChatColor.WHITE + " damage in a 6-block radius.",
                         ChatColor.GRAY + "Only usable while mid-air.",
@@ -49,10 +56,15 @@ public class Nightfall implements CustomItem {
     }
 
     @Override
-    public void onRightClick(Player player) {
+    public boolean onRightClick(Player player) {
         if (player.isOnGround()) {
             player.sendMessage(ChatColor.RED + "Nightfall can only be used while in the air!");
-            return;
+            return false;
+        }
+
+        if (tripleJumpListener.getUsedJumps(player) < 1) {
+            player.sendMessage(ChatColor.RED + "You must use a double jump before activating Nightfall!");
+            return false;
         }
 
         UUID id = player.getUniqueId();
@@ -67,6 +79,7 @@ public class Nightfall implements CustomItem {
         // Particle effect
         player.getWorld().spawnParticle(Particle.WITCH, player.getLocation(), 30, 0.6, 0.6, 0.6, 0.02);
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1f, 1.5f);
+        return true;
     }
 
     @Override
@@ -83,4 +96,6 @@ public class Nightfall implements CustomItem {
     public long getCooldownSeconds() {
         return cooldown;
     }
+
+
 }

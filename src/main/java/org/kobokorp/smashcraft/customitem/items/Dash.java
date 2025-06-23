@@ -73,7 +73,7 @@ public class Dash implements CustomItem {
 //        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1.1f);
 //    }
     @Override
-    public void onRightClick(Player player) {
+    public boolean onRightClick(Player player) {
         UUID id = player.getUniqueId();
 
         // Determine dash direction
@@ -86,7 +86,7 @@ public class Dash implements CustomItem {
 
         if (moveDir.lengthSquared() < 0.01) {
             player.sendMessage(ChatColor.RED + "Can't dash: not enough movement.");
-            return;
+            return false;
         }
 
         // Weaken dash strength if airborne
@@ -105,6 +105,8 @@ public class Dash implements CustomItem {
 
         // Sound effect
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1.1f);
+
+        return true;
     }
 
     @Override

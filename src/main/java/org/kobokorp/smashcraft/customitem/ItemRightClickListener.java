@@ -31,12 +31,12 @@ public class ItemRightClickListener implements Listener {
             return;
         }
 
-        // Set cooldown and perform ability
-        long cooldownMillis = custom.getCooldownSeconds() * 1000;
-        if (cooldownMillis > 0) {
-            cooldownManager.setCooldown(key, playerId, cooldownMillis);
+        if (custom.onRightClick(player)) {
+            // Set cooldown and perform ability
+            long cooldownMillis = custom.getCooldownSeconds() * 1000;
+            if (cooldownMillis > 0) {
+                cooldownManager.setCooldown(key, playerId, cooldownMillis);
+            }
         }
-
-        custom.onRightClick(player);
     }
 }

@@ -1,14 +1,89 @@
 maps:
-  battlefield:
-    deathY: 40
+  temple:
+    deathY: 0
     spawns:
-      - x: 100
-        y: 80
-        z: 100
-        yaw: 90
+      - x: 538
+        y: 46
+        z: 678
+        yaw: 0
         pitch: 0
-      - x: 110
-        y: 80
-        z: 100
-        yaw: 270
+      - x: 538
+        y: 46
+        z: 729
+        yaw: 180
+        pitch: 0
+  lylat:
+    deathY: 10
+    spawns:
+      - x: -217
+        y: 49
+        z: 387
+        yaw: 180
+        pitch: 0
+      - x: -217
+        y: 49
+        z: 375
+        yaw: 0
+        pitch: 0
+  congo:
+    deathY: 10
+    spawns:
+      - x: 37
+        y: 46
+        z: 387
+        yaw: -180
+        pitch: 0
+      - x: 37
+        y: 46
+        z: 372
+        yaw: 0
+        pitch: 0
+  fd:
+    deathY: 9
+    spawns:
+      - x: 284
+        y: 46
+        z: 366
+        yaw: 0
+        pitch: 0
+      - x: 284
+        y: 46
+        z: 384
+        yaw: 180
+        pitch: 0
+  fd2:
+    deathY: 0
+    spawns:
+      - x: 287.5
+        y: 45
+        z: 103
+        yaw: 0
+        pitch: 0
+      - x: 287.5
+        y: 45
+        z: 143
+        yaw: 180
+        pitch: 0
+  inkopolis:
+    deathY: 4
+    spawns:
+      - x: 939.5
+        y: 47
+        z: 585
+        yaw: 180
+        pitch: 0
+      - x: 933
+        y: 47
+        z: 579.5
+        yaw: -90
+        pitch: 0
+      - x: 939.5
+        y: 47
+        z: 573
+        yaw: 0
+        pitch: 0
+      - x: 945.5
+        y: 47
+        z: 579.5
+        yaw: 90
         pitch: 0

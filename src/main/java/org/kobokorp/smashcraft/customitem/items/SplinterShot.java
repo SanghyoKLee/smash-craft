@@ -16,8 +16,8 @@ import java.util.Set;
 
 public class SplinterShot implements CustomItem {
     private final CooldownManager cooldownManager;
-    private final String name = "Splinter Shot";
-    private final Material material = Material.WOODEN_SWORD;
+    private final String name = "Axeblade";
+    private final Material material = Material.WOODEN_AXE;
     private final Set<CustomItemType> customItemTypes = Set.of(CustomItemType.PRIMARY);
     private final long cooldown = 8;
 
@@ -36,16 +36,17 @@ public class SplinterShot implements CustomItem {
                 material,
                 name,
                 List.of(
-                        ChatColor.WHITE + "Charged damage: " + ChatColor.RED + "4%",
+                        ChatColor.WHITE + "Charged damage: " + ChatColor.RED + "6%",
                         ChatColor.WHITE + "Uncharged damage: " + ChatColor.RED + "2%",
-                        ChatColor.WHITE + "Shoot a splinter that" + ChatColor.DARK_GREEN + " poisons the enemy for 2 seconds.",
+                        " ",
+                        ChatColor.WHITE + "Shoot a splinter that" + ChatColor.DARK_GREEN + " poisons " + ChatColor.WHITE + "the enemy for 2 seconds.",
                         ChatColor.WHITE + "Cooldown: " + cooldown + "s"
                 )
         );
     }
 
     @Override
-    public void onRightClick(Player player) {
+    public boolean onRightClick(Player player) {
         Location eyeLoc = player.getEyeLocation();
         Vector direction = eyeLoc.getDirection().normalize();
 
@@ -62,6 +63,8 @@ public class SplinterShot implements CustomItem {
         // Effects
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1f, 1.2f);
         player.getWorld().spawnParticle(Particle.CRIT, eyeLoc, 15, 0.1, 0.1, 0.1, 0.01);
+
+        return true;
     }
 
     @Override

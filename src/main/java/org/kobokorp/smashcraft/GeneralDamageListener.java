@@ -55,7 +55,7 @@ public class GeneralDamageListener implements Listener {
             case FALL, POISON -> 4;
             case FIRE, FIRE_TICK -> 2;
             case LAVA -> 5;
-            case BLOCK_EXPLOSION, ENTITY_EXPLOSION -> 15;
+            case BLOCK_EXPLOSION, ENTITY_EXPLOSION -> 25;
             case MAGIC -> 6;
             case THORNS -> 3;
             default -> 1;

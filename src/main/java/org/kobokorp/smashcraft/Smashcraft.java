@@ -6,7 +6,7 @@ import org.kobokorp.smashcraft.customitem.*;
 import org.kobokorp.smashcraft.shield.ShieldManager;
 
 public final class Smashcraft extends JavaPlugin {
-
+    private static Smashcraft instance;
     private DamageManager damageManager;
     private DisplayUpdater displayUpdater;
     private DamageListener damageListener; // ✅ Add this
@@ -15,10 +15,8 @@ public final class Smashcraft extends JavaPlugin {
     private PlayerItemLoadoutManager playerItemLoadoutManager;
     private CooldownManager cooldownManager;
     private GameManager gameManager;
-
-    private org.kobokorp.smashcraft.MovementTracker movementTracker;
-
-    private static Smashcraft instance;
+    private MovementTracker movementTracker;
+    private TripleJumpListener tripleJumpListener;
 
     public static Smashcraft getInstance() {
         return instance;
@@ -37,9 +35,9 @@ public final class Smashcraft extends JavaPlugin {
         cooldownManager = new CooldownManager();
         movementTracker = new org.kobokorp.smashcraft.MovementTracker();
         gameManager = new GameManager(this, damageManager, displayUpdater);
+        tripleJumpListener = new TripleJumpListener(this);
 
-
-        getServer().getPluginManager().registerEvents(new TripleJumpListener(this), this);
+        getServer().getPluginManager().registerEvents(tripleJumpListener, this);
         getServer().getPluginManager().registerEvents(new HungerListener(), this);
         getServer().getPluginManager().registerEvents(damageListener, this); // ✅ Reuse your created instance
         getServer().getPluginManager().registerEvents(new GeneralDamageListener(damageManager, displayUpdater, shieldManager), this);
@@ -55,7 +53,7 @@ public final class Smashcraft extends JavaPlugin {
         }, 1L, 1L);
 
         // Register Custom Items
-        CustomItemRegistry.registerAll(customItemManager, cooldownManager, movementTracker);
+        CustomItemRegistry.registerAll(customItemManager, cooldownManager, movementTracker, tripleJumpListener);
 
         getCommand("chooseitems").setExecutor(new ChooseItemsCommand(customItemManager, playerItemLoadoutManager, this));
         getCommand("start").setExecutor(new GameCommand(gameManager));

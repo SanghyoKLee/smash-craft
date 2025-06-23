@@ -45,7 +45,7 @@ public class Flash implements CustomItem {
     }
 
     @Override
-    public void onRightClick(Player player) {
+    public boolean onRightClick(Player player) {
         // Create yellow dust particle
         Particle.DustOptions yellowDust = new Particle.DustOptions(Color.YELLOW, 1.5f);
 
@@ -61,6 +61,7 @@ public class Flash implements CustomItem {
 
         // Sound
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f);
+        return true;
     }
 
     @Override

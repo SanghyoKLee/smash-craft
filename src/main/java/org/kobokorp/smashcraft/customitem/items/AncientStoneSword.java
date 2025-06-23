@@ -39,6 +39,7 @@ public class AncientStoneSword implements CustomItem {
                 List.of(
                         ChatColor.WHITE + "Charged damage: " + ChatColor.RED + "6%",
                         ChatColor.WHITE + "Uncharged damage: " + ChatColor.RED + "2%",
+                        ChatColor.WHITE + " ",
                         ChatColor.WHITE + "Fires a heavy rock that inflicts " + ChatColor.BLUE + "Slowness III " + ChatColor.WHITE + "for 4 seconds",
                         ChatColor.WHITE + "Cooldown: " + cooldownSeconds + "s"
                 )
@@ -46,7 +47,7 @@ public class AncientStoneSword implements CustomItem {
     }
 
     @Override
-    public void onRightClick(Player player) {
+    public boolean onRightClick(Player player) {
         Location eyeLoc = player.getEyeLocation();
         Vector direction = eyeLoc.getDirection().normalize();
 
@@ -59,6 +60,8 @@ public class AncientStoneSword implements CustomItem {
 
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_STONE_BREAK, 1f, 1.1f);
         player.getWorld().spawnParticle(Particle.BLOCK_CRUMBLE, eyeLoc, 20, 0.2, 0.2, 0.2, 0.01, Material.STONE.createBlockData());
+
+        return true;
     }
 
     @Override

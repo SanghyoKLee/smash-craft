@@ -10,8 +10,9 @@ public interface CustomItem {
 
     ItemStack getDisplayItem();
 
-    void onRightClick(Player player);
-
+    boolean onRightClick(Player player);
+    // returns true if cooldown should start
+    
     void onHeld(Player player);
 
     Set<CustomItemType> getAllowedTypes(); // NEW METHOD

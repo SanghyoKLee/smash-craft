@@ -16,6 +16,7 @@ public class ItemBuilder {
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
             meta.setDisplayName(plainName);  // No color formatting
+            meta.setItemName(plainName);
             if (lore != null) {
                 meta.setUnbreakable(true);
                 meta.setLore(lore);

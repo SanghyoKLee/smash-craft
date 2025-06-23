@@ -37,14 +37,17 @@ public class TnTLauncher implements CustomItem {
                 material,
                 name,
                 List.of(
-                        ChatColor.WHITE + "Launch a primed TNT forward.",
+                        ChatColor.WHITE + "Melee damage: " + ChatColor.RED + "2%",
+                        ChatColor.WHITE + " ",
+                        ChatColor.WHITE + "Launch a primed TNT forward",
+                        ChatColor.WHITE + "Explosion damage: " + ChatColor.RED + "25%",
                         ChatColor.WHITE + "Cooldown: " + cooldown + "s"
                 )
         );
     }
 
     @Override
-    public void onRightClick(Player player) {
+    public boolean onRightClick(Player player) {
         Location spawnLoc = player.getEyeLocation().add(player.getLocation().getDirection().normalize().multiply(1.5));
         Vector velocity = player.getLocation().getDirection().normalize().multiply(1.1);
 
@@ -56,6 +59,8 @@ public class TnTLauncher implements CustomItem {
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_TNT_PRIMED, 1f, 1f);
         player.getWorld().spawnParticle(Particle.SMOKE, spawnLoc, 20, 0.3, 0.3, 0.3, 0.01);
+
+        return true;
     }
 
     @Override

@@ -73,7 +73,7 @@ public class DamageListener implements Listener {
                     case DIAMOND_AXE -> 15;
                     case NETHERITE_SWORD -> 12;
                     case NETHERITE_AXE -> 18;
-                    case MACE -> 20;
+                    case MACE -> 15;
                     default -> 2;
                 };
             }
