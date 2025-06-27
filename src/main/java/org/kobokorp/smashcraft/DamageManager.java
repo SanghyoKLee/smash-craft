@@ -13,7 +13,7 @@ public class DamageManager {
 
     public void addDamage(UUID playerId, double amount) {
         double current = getDamage(playerId);
-        double newDamage = Math.min(current + amount, 999); // cap for sanity
+        double newDamage = Math.max(0, Math.min(current + amount, 999));
         playerDamage.put(playerId, newDamage);
     }
 

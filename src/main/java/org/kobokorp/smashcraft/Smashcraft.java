@@ -53,7 +53,7 @@ public final class Smashcraft extends JavaPlugin {
         }, 1L, 1L);
 
         // Register Custom Items
-        CustomItemRegistry.registerAll(customItemManager, cooldownManager, movementTracker, tripleJumpListener);
+        CustomItemRegistry.registerAll(customItemManager, cooldownManager, movementTracker, tripleJumpListener, damageManager);
 
         getCommand("chooseitems").setExecutor(new ChooseItemsCommand(customItemManager, playerItemLoadoutManager, this));
         getCommand("start").setExecutor(new GameCommand(gameManager));
