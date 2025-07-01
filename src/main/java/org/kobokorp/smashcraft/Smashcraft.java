@@ -6,64 +6,80 @@ import org.kobokorp.smashcraft.customitem.*;
 import org.kobokorp.smashcraft.shield.ShieldManager;
 
 public final class Smashcraft extends JavaPlugin {
+
+    // --- Singleton Instance ---
     private static Smashcraft instance;
-    private DamageManager damageManager;
-    private DisplayUpdater displayUpdater;
-    private DamageListener damageListener; // ✅ Add this
-    private ShieldManager shieldManager;
-    private CustomItemManager customItemManager;
-    private PlayerItemLoadoutManager playerItemLoadoutManager;
-    private CooldownManager cooldownManager;
-    private GameManager gameManager;
-    private MovementTracker movementTracker;
-    private TripleJumpListener tripleJumpListener;
 
     public static Smashcraft getInstance() {
         return instance;
     }
 
+    // --- Core Systems ---
+    private DamageManager damageManager;
+    private DisplayUpdater displayUpdater;
+    private ShieldManager shieldManager;
+    private DamageListener damageListener;
+    private MovementTracker movementTracker;
+
+    // --- Game Systems ---
+    private GameManager gameManager;
+    private TripleJumpListener tripleJumpListener;
+
+    // --- Custom Items ---
+    private CooldownManager cooldownManager;
+    private CustomItemManager customItemManager;
+    private PlayerItemLoadoutManager playerItemLoadoutManager;
+
     @Override
     public void onEnable() {
         getLogger().info("Smashcraft enabled");
+
         instance = this;
+
+        // --- Initialize Core Systems ---
         damageManager = new DamageManager();
         displayUpdater = new DisplayUpdater(damageManager);
-        shieldManager = new ShieldManager(); // ✅ Moved up here
+        shieldManager = new ShieldManager();
         damageListener = new DamageListener(damageManager, displayUpdater, this, shieldManager);
-        customItemManager = new CustomItemManager();
-        playerItemLoadoutManager = new PlayerItemLoadoutManager();
-        cooldownManager = new CooldownManager();
-        movementTracker = new org.kobokorp.smashcraft.MovementTracker();
+        movementTracker = new MovementTracker();
+
+        // --- Initialize Game Systems ---
         gameManager = new GameManager(this, damageManager, displayUpdater);
         tripleJumpListener = new TripleJumpListener(this);
 
-        getServer().getPluginManager().registerEvents(tripleJumpListener, this);
-        getServer().getPluginManager().registerEvents(new HungerListener(), this);
-        getServer().getPluginManager().registerEvents(damageListener, this); // ✅ Reuse your created instance
-        getServer().getPluginManager().registerEvents(new GeneralDamageListener(damageManager, displayUpdater, shieldManager), this);
-        Bukkit.getPluginManager().registerEvents(new ItemRightClickListener(customItemManager, cooldownManager), this);
-        getServer().getPluginManager().registerEvents(new CustomItemSelectorGUI(customItemManager, playerItemLoadoutManager, this), this);
-        getServer().getPluginManager().registerEvents(new TntExplosionListener(), this);
+        // --- Initialize Custom Item Systems ---
+        cooldownManager = new CooldownManager();
+        customItemManager = new CustomItemManager();
+        playerItemLoadoutManager = new PlayerItemLoadoutManager();
 
+        // --- Register Event Listeners ---
+        var pluginManager = getServer().getPluginManager();
+        pluginManager.registerEvents(tripleJumpListener, this);
+        pluginManager.registerEvents(new HungerListener(), this);
+        pluginManager.registerEvents(damageListener, this);
+        pluginManager.registerEvents(new GeneralDamageListener(damageManager, displayUpdater, shieldManager), this);
+        pluginManager.registerEvents(new ItemRightClickListener(customItemManager, cooldownManager), this);
+        pluginManager.registerEvents(new CustomItemSelectorGUI(customItemManager, playerItemLoadoutManager, this), this);
+        pluginManager.registerEvents(new TntExplosionListener(), this);
+        pluginManager.registerEvents(new GameListener(gameManager), this);
+
+        // --- Register Commands ---
         getCommand("smashtest").setExecutor(new SmashTestCommand(damageManager, displayUpdater, this));
         getCommand("smashsetdamage").setExecutor(new SmashSetDamageCommand(damageManager, displayUpdater));
-
-        Bukkit.getScheduler().runTaskTimer(this, () -> {
-            shieldManager.tick();
-        }, 1L, 1L);
-
-        // Register Custom Items
-        CustomItemRegistry.registerAll(customItemManager, cooldownManager, movementTracker, tripleJumpListener, damageManager);
-
         getCommand("chooseitems").setExecutor(new ChooseItemsCommand(customItemManager, playerItemLoadoutManager, this));
         getCommand("start").setExecutor(new GameCommand(gameManager));
 
-        getServer().getPluginManager().registerEvents(new GameListener(gameManager), this);
-        saveDefaultConfig(); // ensures plugin folder exists
-        saveResource("config.yml", false); // ensure it's copied to plugin folder
-        MapManager.loadMaps(this); // load map data
-    }
+        // --- Schedule Tasks ---
+        Bukkit.getScheduler().runTaskTimer(this, shieldManager::tick, 1L, 1L);
 
+        // --- Register Custom Items ---
+        CustomItemRegistry.registerAll(customItemManager, cooldownManager, movementTracker, tripleJumpListener, damageManager);
+
+        // --- Load Configurations ---
+        saveDefaultConfig();
+        saveResource("config.yml", false);
+        MapManager.loadMaps(this);
+    }
 
     @Override
     public void onDisable() {
