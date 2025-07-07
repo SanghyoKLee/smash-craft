@@ -1,4 +1,4 @@
-package org.kobokorp.smashcraft.shield;
+package org.kobokorp.smashcraft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;

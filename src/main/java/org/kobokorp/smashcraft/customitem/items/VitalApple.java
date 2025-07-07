@@ -23,7 +23,7 @@ public class VitalApple implements CustomItem {
     private final String name = "Vital Apple";
     private final Material material = Material.GOLDEN_APPLE;
     private final Set<CustomItemType> customItemTypes = Set.of(CustomItemType.TERTIARY);
-    private final long cooldown = 30;
+    private final long cooldown = 40;
 
     public VitalApple(CooldownManager cooldownManager, DamageManager damageManager) {
         this.cooldownManager = cooldownManager;

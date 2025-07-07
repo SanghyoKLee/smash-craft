@@ -12,10 +12,10 @@ public interface CustomItem {
 
     boolean onRightClick(Player player);
     // returns true if cooldown should start
-    
+
     void onHeld(Player player);
 
-    Set<CustomItemType> getAllowedTypes(); // NEW METHOD
+    Set<CustomItemType> getAllowedTypes();
 
     default long getCooldownSeconds() {
         return 0;

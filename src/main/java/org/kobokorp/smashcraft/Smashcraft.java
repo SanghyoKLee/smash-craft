@@ -2,8 +2,11 @@ package org.kobokorp.smashcraft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.kobokorp.smashcraft.commands.GameCommand;
+import org.kobokorp.smashcraft.commands.LoadoutCommand;
+import org.kobokorp.smashcraft.commands.SmashSetDamageCommand;
+import org.kobokorp.smashcraft.commands.SmashTestCommand;
 import org.kobokorp.smashcraft.customitem.*;
-import org.kobokorp.smashcraft.shield.ShieldManager;
 
 public final class Smashcraft extends JavaPlugin {
 
@@ -66,7 +69,7 @@ public final class Smashcraft extends JavaPlugin {
         // --- Register Commands ---
         getCommand("smashtest").setExecutor(new SmashTestCommand(damageManager, displayUpdater, this));
         getCommand("smashsetdamage").setExecutor(new SmashSetDamageCommand(damageManager, displayUpdater));
-        getCommand("chooseitems").setExecutor(new ChooseItemsCommand(customItemManager, playerItemLoadoutManager, this));
+        getCommand("loadout").setExecutor(new LoadoutCommand(customItemManager, playerItemLoadoutManager, this));
         getCommand("start").setExecutor(new GameCommand(gameManager));
 
         // --- Schedule Tasks ---

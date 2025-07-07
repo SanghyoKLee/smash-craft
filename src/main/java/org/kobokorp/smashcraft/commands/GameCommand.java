@@ -1,9 +1,10 @@
-package org.kobokorp.smashcraft;
+package org.kobokorp.smashcraft.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.kobokorp.smashcraft.GameManager;
 
 public class GameCommand implements CommandExecutor {
     private final GameManager gameManager;

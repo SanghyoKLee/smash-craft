@@ -19,6 +19,6 @@ public class CustomItemManager {
     }
 
     public Collection<CustomItem> getAll() {
-        return itemMap.values(); // assuming 'items' is your Map<String, CustomItem>
+        return itemMap.values(); // 'items' is Map<String, CustomItem>
     }
 }

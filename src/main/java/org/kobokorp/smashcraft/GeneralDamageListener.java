@@ -1,6 +1,5 @@
 package org.kobokorp.smashcraft;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
@@ -9,7 +8,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.util.Vector;
-import org.kobokorp.smashcraft.shield.ShieldManager;
 
 import java.util.UUID;
 
@@ -46,7 +44,7 @@ public class GeneralDamageListener implements Listener {
         // Cancel if shielding and damage shouldn't bypass
         if (shieldManager.isShielding(playerId) && !isBypassShield) {
             event.setCancelled(true);
-            player.sendMessage(ChatColor.BLUE + "Shield blocked the attack!");
+            //player.sendMessage(ChatColor.BLUE + "Shield blocked the attack!");
             return;
         }
 
@@ -75,8 +73,8 @@ public class GeneralDamageListener implements Listener {
             player.setVelocity(knockback);
         }
 
-        player.sendMessage("Damage taken: +" + damage + "% → Total: " +
-                displayUpdater.damageManager.getFormattedDamage(playerId));
+//        player.sendMessage("Damage taken: +" + damage + "% → Total: " +
+//                displayUpdater.damageManager.getFormattedDamage(playerId));
 
         event.setDamage(0);
     }
@@ -100,7 +98,7 @@ public class GeneralDamageListener implements Listener {
         knockback.setY(0.5 + percent / 150.0);
 
         player.setVelocity(knockback);
-        player.sendMessage("Damage taken: +" + customDamage + "% → Total: " + displayUpdater.damageManager.getFormattedDamage(player.getUniqueId()));
+        //player.sendMessage("Damage taken: +" + customDamage + "% → Total: " + displayUpdater.damageManager.getFormattedDamage(player.getUniqueId()));
     }
 
     public class TntExplosionListener implements Listener {

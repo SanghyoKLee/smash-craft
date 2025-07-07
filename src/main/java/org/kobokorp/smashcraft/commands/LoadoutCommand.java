@@ -1,4 +1,4 @@
-package org.kobokorp.smashcraft;
+package org.kobokorp.smashcraft.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,13 +9,13 @@ import org.kobokorp.smashcraft.customitem.CustomItemManager;
 import org.kobokorp.smashcraft.customitem.CustomItemSelectorGUI;
 import org.kobokorp.smashcraft.customitem.PlayerItemLoadoutManager;
 
-public class ChooseItemsCommand implements CommandExecutor {
+public class LoadoutCommand implements CommandExecutor {
 
     private final CustomItemManager itemManager;
     private final PlayerItemLoadoutManager loadoutManager;
     private final Plugin plugin;
 
-    public ChooseItemsCommand(CustomItemManager itemManager, PlayerItemLoadoutManager loadoutManager, Plugin plugin) {
+    public LoadoutCommand(CustomItemManager itemManager, PlayerItemLoadoutManager loadoutManager, Plugin plugin) {
         this.itemManager = itemManager;
         this.loadoutManager = loadoutManager;
         this.plugin = plugin;

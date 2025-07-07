@@ -48,8 +48,8 @@ public class TnTLauncher implements CustomItem {
 
     @Override
     public boolean onRightClick(Player player) {
-        Location spawnLoc = player.getEyeLocation().add(player.getLocation().getDirection().normalize().multiply(1.5));
-        Vector velocity = player.getLocation().getDirection().normalize().multiply(1.1);
+        Location spawnLoc = player.getEyeLocation().add(player.getLocation().getDirection().normalize().multiply(1.4));
+        Vector velocity = player.getLocation().getDirection().normalize().multiply(1.05);
 
         TNTPrimed tnt = player.getWorld().spawn(spawnLoc, TNTPrimed.class);
         tnt.setMetadata("smashcraft_tnt", new FixedMetadataValue(Smashcraft.getInstance(), player.getUniqueId().toString()));

@@ -15,6 +15,6 @@ commands:
     description: "Set or reset your damage to a specific percentage"
     usage: /smashsetdamage <percent>
   
-  chooseitems:
+  loadout:
     description: Opens the custom item selection GUI
-    usage: /chooseitems
+    usage: /loadout

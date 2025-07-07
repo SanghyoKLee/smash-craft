@@ -12,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-import org.kobokorp.smashcraft.shield.ShieldManager;
 
 import java.util.UUID;
 
@@ -43,7 +42,7 @@ public class DamageListener implements Listener {
 
         if (shieldManager.isShielding(victimId)) {
             event.setDamage(0);
-            victim.sendMessage(ChatColor.BLUE + "Shielded the attack!");
+            //victim.sendMessage(ChatColor.BLUE + "Shielded the attack!");
             return;
         }
 
@@ -141,9 +140,9 @@ public class DamageListener implements Listener {
         }
 
         if (attacker != null) {
-            attacker.sendMessage("Dealt " + damage + "% → " + damageManager.getFormattedDamage(victimId));
+            //attacker.sendMessage("Dealt " + damage + "% → " + damageManager.getFormattedDamage(victimId));
         }
-        victim.sendMessage("Current Damage: " + damageManager.getFormattedDamage(victimId));
+        //victim.sendMessage("Current Damage: " + damageManager.getFormattedDamage(victimId));
     }
 
     private void applyKnockbackLogic(Location attackerLocation, Player attacker, Player victim, double damage) {
@@ -158,7 +157,7 @@ public class DamageListener implements Listener {
 
         victim.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60, 0)); // Poison I for 3 seconds
         arrow.remove();
-        victim.sendMessage(ChatColor.DARK_GREEN + "You were hit by a poisoned splinter!");
+        //victim.sendMessage(ChatColor.DARK_GREEN + "You were hit by a poisoned splinter!");
     }
 
     @EventHandler
@@ -169,7 +168,7 @@ public class DamageListener implements Listener {
 
         victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 80, 2)); // Slowness III for 4 seconds
         rock.remove();
-        victim.sendMessage(ChatColor.DARK_GRAY + "You've been hit by a Stone Slam!");
+        //victim.sendMessage(ChatColor.DARK_GRAY + "You've been hit by a Stone Slam!");
     }
 
     @EventHandler
@@ -197,7 +196,7 @@ public class DamageListener implements Listener {
 
                 if (target instanceof Player targetPlayer) {
                     if (shieldManager.isShielding(targetPlayer.getUniqueId())) {
-                        targetPlayer.sendMessage(ChatColor.BLUE + "Blocked Nightfall with shield!");
+                        //targetPlayer.sendMessage(ChatColor.BLUE + "Blocked Nightfall with shield!");
                         continue;
                     }
 

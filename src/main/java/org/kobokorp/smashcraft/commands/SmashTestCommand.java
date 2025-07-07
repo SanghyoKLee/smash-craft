@@ -1,4 +1,4 @@
-package org.kobokorp.smashcraft;
+package org.kobokorp.smashcraft.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -7,6 +7,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.kobokorp.smashcraft.DamageListener;
+import org.kobokorp.smashcraft.DamageManager;
+import org.kobokorp.smashcraft.DisplayUpdater;
 
 public class SmashTestCommand implements CommandExecutor {
 

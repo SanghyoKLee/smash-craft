@@ -94,7 +94,7 @@ public class Dash implements CustomItem {
         moveDir.multiply(strength);
 
         System.out.println("[DASH] Dash direction: " + moveDir);
-        player.sendMessage(ChatColor.GRAY + "Dashing: " + moveDir);
+        //player.sendMessage(ChatColor.GRAY + "Dashing: " + moveDir);
 
         // Apply velocity
         player.setVelocity(moveDir);
