@@ -7,6 +7,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.kobokorp.smashcraft.DamageManager;
+import org.kobokorp.smashcraft.DisplayUpdater;
 import org.kobokorp.smashcraft.customitem.CooldownManager;
 import org.kobokorp.smashcraft.customitem.CustomItem;
 import org.kobokorp.smashcraft.customitem.CustomItemType;
@@ -16,18 +17,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class VitalApple implements CustomItem {
+public class HealthPotion implements CustomItem {
 
     private final CooldownManager cooldownManager;
     private final DamageManager damageManager;
-    private final String name = "Vital Apple";
-    private final Material material = Material.GOLDEN_APPLE;
+    private final String name = "Health Potion";
+    private final Material material = Material.DRAGON_BREATH;
     private final Set<CustomItemType> customItemTypes = Set.of(CustomItemType.TERTIARY);
     private final long cooldown = 40;
+    private final DisplayUpdater displayUpdater;
 
-    public VitalApple(CooldownManager cooldownManager, DamageManager damageManager) {
+    public HealthPotion(CooldownManager cooldownManager, DamageManager damageManager, DisplayUpdater displayUpdater) {
         this.cooldownManager = cooldownManager;
         this.damageManager = damageManager;
+        this.displayUpdater = displayUpdater;
     }
 
     @Override
@@ -41,7 +44,7 @@ public class VitalApple implements CustomItem {
                 material,
                 name,
                 List.of(
-                        ChatColor.WHITE + "Eat to " + ChatColor.GREEN + "heal " + ChatColor.RED + "15% " + ChatColor.WHITE + "damage.",
+                        ChatColor.WHITE + "Drink to " + ChatColor.GREEN + "heal " + ChatColor.RED + "15% " + ChatColor.WHITE + "damage.",
                         ChatColor.GRAY + "Cooldown: " + cooldown + "s"
                 )
         );
@@ -67,6 +70,7 @@ public class VitalApple implements CustomItem {
                 0.1
         );
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.5f);
+        displayUpdater.update(player);
         return true;
     }
 

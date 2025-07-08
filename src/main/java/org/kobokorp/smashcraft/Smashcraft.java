@@ -76,7 +76,7 @@ public final class Smashcraft extends JavaPlugin {
         Bukkit.getScheduler().runTaskTimer(this, shieldManager::tick, 1L, 1L);
 
         // --- Register Custom Items ---
-        CustomItemRegistry.registerAll(customItemManager, cooldownManager, movementTracker, tripleJumpListener, damageManager);
+        CustomItemRegistry.registerAll(customItemManager, cooldownManager, movementTracker, tripleJumpListener, damageManager, displayUpdater);
 
         // --- Load Configurations ---
         saveDefaultConfig();

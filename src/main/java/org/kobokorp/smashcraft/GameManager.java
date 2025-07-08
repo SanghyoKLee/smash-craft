@@ -75,7 +75,7 @@ public class GameManager {
             if (map != null) {
                 teleportAndInvuln(player, map.getRandomSpawn());
             }
-            
+
             player.sendMessage(ChatColor.YELLOW + "You have " + lives + " lives left!");
         }
     }
@@ -98,6 +98,7 @@ public class GameManager {
             if (winner != null) {
                 Bukkit.broadcastMessage(ChatColor.GOLD + winner.getName() + " wins!");
                 winner.getWorld().spawnParticle(Particle.FIREWORK, winner.getLocation(), 100);
+                winner.getWorld().spawnParticle(Particle.FIREFLY, winner.getLocation(), 100);
                 winner.getWorld().playSound(winner.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f);
             }
             gameRunning = false;
