@@ -48,7 +48,7 @@ public class Nightfall implements CustomItem {
                         ChatColor.WHITE + "Uncharged damage: " + ChatColor.RED + "2%",
                         ChatColor.WHITE + " ",
                         ChatColor.WHITE + "Slam downward from the air.",
-                        ChatColor.WHITE + "Deals " + ChatColor.RED + "35%" + ChatColor.WHITE + " damage in a 6-block radius.",
+                        ChatColor.WHITE + "Deals " + ChatColor.RED + "30%" + ChatColor.WHITE + " damage in a 6-block radius.",
                         ChatColor.GRAY + "Only usable while mid-air.",
                         ChatColor.WHITE + "Cooldown: " + cooldown + "s"
                 )

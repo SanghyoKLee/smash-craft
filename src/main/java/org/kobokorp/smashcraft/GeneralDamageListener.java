@@ -89,13 +89,29 @@ public class GeneralDamageListener implements Listener {
 
         UUID shooter = UUID.fromString(tnt.getMetadata("smashcraft_tnt").get(0).asString());
 
-        double customDamage = 8;
+        double customDamage = 25;
         damageManager.addDamage(player.getUniqueId(), customDamage);
         displayUpdater.update(player);
 
         double percent = damageManager.getDamage(player.getUniqueId());
-        Vector knockback = player.getLocation().toVector().subtract(tnt.getLocation().toVector()).normalize();
-        knockback.setY(0.5 + percent / 150.0);
+        // Base knockback direction away from TNT
+        Vector knockback = player.getLocation().toVector()
+                .subtract(tnt.getLocation().toVector())
+                .setY(0)
+                .normalize();
+
+        // Add tiny random horizontal vector
+        double randomAngle = Math.random() * 2 * Math.PI;
+        double randomStrength = 4; // adjust for how “tiny” you want the nudge
+        Vector randomOffset = new Vector(
+                Math.cos(randomAngle) * randomStrength,
+                0,
+                Math.sin(randomAngle) * randomStrength
+        );
+
+        knockback.add(randomOffset);
+        //knockback.normalize().multiply(0.5 + percent / 70.0);
+        knockback.setY(0.5 + percent / 120.0);
 
         player.setVelocity(knockback);
         //player.sendMessage("Damage taken: +" + customDamage + "% → Total: " + displayUpdater.damageManager.getFormattedDamage(player.getUniqueId()));

@@ -16,5 +16,7 @@ public class CustomItemRegistry {
         manager.register(new AncientStoneSword(cooldownManager));
         manager.register(new Nightfall(cooldownManager, tripleJumpListener));
         manager.register(new HealthPotion(cooldownManager, damageManager, displayUpdater));
+        manager.register(new Scythe(cooldownManager));
+        manager.register(new ArrowShot(cooldownManager));
     }
 }

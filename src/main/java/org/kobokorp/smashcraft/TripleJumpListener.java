@@ -71,7 +71,7 @@ public class TripleJumpListener implements Listener {
         player.setFlying(false);
 
         // Stronger forward jump
-        Vector jumpVector = player.getLocation().getDirection().multiply(0.4).setY(0.8);
+        Vector jumpVector = player.getLocation().getDirection().multiply(0.33).setY(0.76);
         player.setVelocity(jumpVector);
 
         // Mid-air animation
@@ -83,7 +83,7 @@ public class TripleJumpListener implements Listener {
                 0 // Speed (0 for default)
         );
 
-        player.playSound(player.getLocation(), Sound.ENTITY_BAT_TAKEOFF, 1f, 1.2f);
+        player.playSound(player.getLocation(), Sound.ENTITY_BAT_TAKEOFF, 1f, 1.0f);
         jumpCounts.put(player.getUniqueId(), usedJumps + 1);
 
         if (usedJumps + 1 < MAX_AIR_JUMPS) {

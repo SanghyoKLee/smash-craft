@@ -29,7 +29,7 @@ public class Dash implements CustomItem {
         this.name = "Dash";
         this.material = Material.FEATHER;
         this.customItemTypes = Set.of(CustomItemType.SECONDARY);
-        this.cooldown = 6;
+        this.cooldown = 7;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class Dash implements CustomItem {
         }
 
         // Weaken dash strength if airborne
-        double strength = player.isOnGround() ? 1.5 : 0.85;
+        double strength = player.isOnGround() ? 1.5 : 0.80;
         moveDir.multiply(strength);
 
         System.out.println("[DASH] Dash direction: " + moveDir);

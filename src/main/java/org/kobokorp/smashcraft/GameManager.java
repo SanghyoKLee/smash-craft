@@ -61,7 +61,9 @@ public class GameManager {
         if (lives <= 0) {
             activePlayers.remove(player.getUniqueId());
             player.setGameMode(GameMode.SPECTATOR);
-            player.sendMessage(ChatColor.RED + "You're out!");
+            Bukkit.broadcastMessage(
+                    ChatColor.RED + player.getName() + " is out!"
+            );
             checkWinCondition();
             List<Location> spawns = map.getSpawnPoints();
             if (spawns != null && !spawns.isEmpty()) {
@@ -76,7 +78,9 @@ public class GameManager {
                 teleportAndInvuln(player, map.getRandomSpawn());
             }
 
-            player.sendMessage(ChatColor.YELLOW + "You have " + lives + " lives left!");
+            Bukkit.broadcastMessage(
+                    ChatColor.YELLOW + player.getName() + " has " + lives + " lives remaining!"
+            );
         }
     }
 

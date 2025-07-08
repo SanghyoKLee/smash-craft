@@ -39,7 +39,7 @@ public class TnTLauncher implements CustomItem {
                 List.of(
                         ChatColor.WHITE + "Melee damage: " + ChatColor.RED + "2%",
                         ChatColor.WHITE + " ",
-                        ChatColor.WHITE + "Launch a primed TNT forward",
+                        ChatColor.WHITE + "Launch a primed TNT",
                         ChatColor.WHITE + "Explosion damage: " + ChatColor.RED + "25%",
                         ChatColor.WHITE + "Cooldown: " + cooldown + "s"
                 )

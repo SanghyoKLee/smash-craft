@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -70,6 +71,7 @@ public class DamageListener implements Listener {
                     case IRON_AXE -> 12;
                     case DIAMOND_SWORD -> 10;
                     case DIAMOND_AXE -> 15;
+                    case NETHERITE_HOE -> 5;
                     case NETHERITE_SWORD -> 12;
                     case NETHERITE_AXE -> 18;
                     case MACE -> 15;
@@ -166,9 +168,34 @@ public class DamageListener implements Listener {
         if (!(event.getDamager() instanceof Snowball rock)) return;
         if (!rock.hasMetadata("ancient_stone_sword_projectile")) return;
 
-        victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 80, 2)); // Slowness III for 4 seconds
+        // Apply slowness effect
+        victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 80, 5)); // Slowness V for 4 seconds
+
+        // Show visual feedback:
+        new BukkitRunnable() {
+            int ticks = 0;
+
+            @Override
+            public void run() {
+                if (ticks >= 80 || !victim.isOnline()) {
+                    cancel();
+                    return;
+                }
+                victim.getWorld().spawnParticle(
+                        Particle.SNOWFLAKE,
+                        victim.getLocation().add(0, 0.5, 0),
+                        15,
+                        0.3, 0.3, 0.3,
+                        0
+                );
+                ticks += 5;
+            }
+        }.runTaskTimer(Smashcraft.getInstance(), 0L, 5L);
+
+
+        // Play a heavy stone sound
+        victim.getWorld().playSound(victim.getLocation(), Sound.BLOCK_STONE_HIT, 1.2f, 0.6f);
         rock.remove();
-        //victim.sendMessage(ChatColor.DARK_GRAY + "You've been hit by a Stone Slam!");
     }
 
     @EventHandler
@@ -200,7 +227,7 @@ public class DamageListener implements Listener {
                         continue;
                     }
 
-                    this.applySmashKnockback(loc, player, targetPlayer, 35.0);
+                    this.applySmashKnockback(loc, player, targetPlayer, 30.0);
                 } else {
                     target.damage(7.0, player);
 
