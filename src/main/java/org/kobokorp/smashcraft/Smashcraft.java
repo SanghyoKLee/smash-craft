@@ -23,6 +23,7 @@ public final class Smashcraft extends JavaPlugin {
     private ShieldManager shieldManager;
     private DamageListener damageListener;
     private MovementTracker movementTracker;
+    private LeaderboardManager leaderboardManager;
 
     // --- Game Systems ---
     private GameManager gameManager;
@@ -45,6 +46,7 @@ public final class Smashcraft extends JavaPlugin {
         shieldManager = new ShieldManager();
         damageListener = new DamageListener(damageManager, displayUpdater, this, shieldManager);
         movementTracker = new MovementTracker();
+        leaderboardManager = new LeaderboardManager(this);
 
         // --- Initialize Game Systems ---
         gameManager = new GameManager(this, damageManager, displayUpdater);
@@ -86,6 +88,11 @@ public final class Smashcraft extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        leaderboardManager.saveData();
         getLogger().info("Smashcraft disabled");
+    }
+
+    public LeaderboardManager getLeaderboardManager() {
+        return leaderboardManager;
     }
 }

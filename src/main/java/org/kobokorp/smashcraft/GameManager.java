@@ -104,6 +104,14 @@ public class GameManager {
                 winner.getWorld().spawnParticle(Particle.FIREWORK, winner.getLocation(), 100);
                 winner.getWorld().spawnParticle(Particle.FIREFLY, winner.getLocation(), 100);
                 winner.getWorld().playSound(winner.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1f, 1f);
+                // Increment wins
+                plugin.getLeaderboardManager().incrementWins(winner.getUniqueId());
+
+                // Save updated leaderboard
+                plugin.getLeaderboardManager().saveData();
+
+                // Broadcast the leaderboard
+                plugin.getLeaderboardManager().broadcastLeaderboard();
             }
             gameRunning = false;
         }
