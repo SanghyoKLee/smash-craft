@@ -106,7 +106,7 @@ public class LeaderboardManager {
                     ChatColor.GOLD + "" + rank + ". " +
                             ChatColor.YELLOW + name +
                             ChatColor.GRAY + " - " +
-                            ChatColor.GREEN + winCount + " win(s)"
+                            ChatColor.GREEN + winCount + " wins"
             );
             rank++;
         }

@@ -89,7 +89,7 @@ public class GeneralDamageListener implements Listener {
 
         UUID shooter = UUID.fromString(tnt.getMetadata("smashcraft_tnt").get(0).asString());
 
-        double customDamage = 25;
+        double customDamage = 22;
         damageManager.addDamage(player.getUniqueId(), customDamage);
         displayUpdater.update(player);
 
@@ -102,7 +102,7 @@ public class GeneralDamageListener implements Listener {
 
         // Add tiny random horizontal vector
         double randomAngle = Math.random() * 2 * Math.PI;
-        double randomStrength = 4; // adjust for how “tiny” you want the nudge
+        double randomStrength = 3; // adjust for how “tiny” you want the nudge
         Vector randomOffset = new Vector(
                 Math.cos(randomAngle) * randomStrength,
                 0,

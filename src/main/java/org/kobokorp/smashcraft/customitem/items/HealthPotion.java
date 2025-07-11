@@ -24,7 +24,7 @@ public class HealthPotion implements CustomItem {
     private final String name = "Health Potion";
     private final Material material = Material.DRAGON_BREATH;
     private final Set<CustomItemType> customItemTypes = Set.of(CustomItemType.TERTIARY);
-    private final long cooldown = 40;
+    private final long cooldown = 45;
     private final DisplayUpdater displayUpdater;
 
     public HealthPotion(CooldownManager cooldownManager, DamageManager damageManager, DisplayUpdater displayUpdater) {

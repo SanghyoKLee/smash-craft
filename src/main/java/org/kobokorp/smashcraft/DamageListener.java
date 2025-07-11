@@ -44,6 +44,13 @@ public class DamageListener implements Listener {
         if (shieldManager.isShielding(victimId)) {
             event.setDamage(0);
             //victim.sendMessage(ChatColor.BLUE + "Shielded the attack!");
+            victim.getWorld().playSound(
+                    victim.getLocation(),
+                    Sound.ITEM_SHIELD_BLOCK,
+                    SoundCategory.PLAYERS,
+                    1.0f,    // volume
+                    1.0f     // pitch
+            );
             return;
         }
 
@@ -60,7 +67,15 @@ public class DamageListener implements Listener {
             fullyCharged = cooldown >= 0.9;
 
             if (!fullyCharged) {
-                damagePercent = 2;
+                //damagePercent = 2;
+                attacker.getWorld().playSound(
+                        attacker.getLocation(),
+                        Sound.ENTITY_ITEM_BREAK,
+                        0.8f,
+                        0.5f
+                );
+                event.setDamage(0);
+                return;
             } else {
                 damagePercent = switch (material) {
                     case WOODEN_SWORD -> 4;
@@ -79,11 +94,9 @@ public class DamageListener implements Listener {
                 };
             }
 
-            if (fullyCharged) {
-                spawnHitEffect(victim.getLocation());
-            }
-
+            spawnHitEffect(victim.getLocation());
             applySmashKnockback(sourceLoc, attacker, victim, damagePercent);
+
             event.setDamage(0);
 
         } else if (event.getDamager() instanceof Arrow arrow) {
