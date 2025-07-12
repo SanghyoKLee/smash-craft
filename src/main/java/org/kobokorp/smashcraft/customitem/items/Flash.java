@@ -38,7 +38,7 @@ public class Flash implements CustomItem {
                 material,
                 name,
                 List.of(
-                        ChatColor.WHITE + "Teleport forward 10 blocks.",
+                        ChatColor.WHITE + "Teleport forward 9 blocks.",
                         ChatColor.WHITE + "Cooldown: " + this.cooldown + "s"
                 )
         );
@@ -52,7 +52,7 @@ public class Flash implements CustomItem {
         // Spawn particles before teleport
         player.getLocation().getWorld().spawnParticle(Particle.DUST, player.getLocation(), 30, 0.3, 0.5, 0.3, yellowDust);
 
-        Vector direction = player.getLocation().getDirection().normalize().multiply(10);
+        Vector direction = player.getLocation().getDirection().normalize().multiply(9);
         Location after = player.getLocation().add(direction);
 
         // Teleport

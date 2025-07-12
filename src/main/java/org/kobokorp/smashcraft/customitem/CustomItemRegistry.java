@@ -18,5 +18,7 @@ public class CustomItemRegistry {
         manager.register(new HealthPotion(cooldownManager, damageManager, displayUpdater));
         manager.register(new Scythe(cooldownManager));
         manager.register(new ArrowShot(cooldownManager));
+        manager.register(new BeastScroll(cooldownManager));
+
     }
 }

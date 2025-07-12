@@ -21,4 +21,12 @@ public class CustomItemManager {
     public Collection<CustomItem> getAll() {
         return itemMap.values(); // 'items' is Map<String, CustomItem>
     }
+
+    public <T extends CustomItem> T getItemByClass(Class<T> clazz) {
+        return itemMap.values().stream()
+                .filter(clazz::isInstance)
+                .map(clazz::cast)
+                .findFirst()
+                .orElse(null);
+    }
 }

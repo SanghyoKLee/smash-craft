@@ -89,7 +89,7 @@ public class GeneralDamageListener implements Listener {
 
         UUID shooter = UUID.fromString(tnt.getMetadata("smashcraft_tnt").get(0).asString());
 
-        double customDamage = 22;
+        double customDamage = 20;
         damageManager.addDamage(player.getUniqueId(), customDamage);
         displayUpdater.update(player);
 

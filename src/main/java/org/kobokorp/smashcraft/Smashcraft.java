@@ -67,6 +67,7 @@ public final class Smashcraft extends JavaPlugin {
         pluginManager.registerEvents(new CustomItemSelectorGUI(customItemManager, playerItemLoadoutManager, this), this);
         pluginManager.registerEvents(new TntExplosionListener(), this);
         pluginManager.registerEvents(new GameListener(gameManager), this);
+        pluginManager.registerEvents(new BeastScrollListener(), this);
 
         // --- Register Commands ---
         getCommand("smashtest").setExecutor(new SmashTestCommand(damageManager, displayUpdater, this));
@@ -94,5 +95,17 @@ public final class Smashcraft extends JavaPlugin {
 
     public LeaderboardManager getLeaderboardManager() {
         return leaderboardManager;
+    }
+
+    public CustomItemManager getCustomItemManager() {
+        return customItemManager;
+    }
+
+    public DamageManager getDamageManager() {
+        return damageManager;
+    }
+
+    public DisplayUpdater getDisplayUpdater() {
+        return displayUpdater;
     }
 }

@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.kobokorp.smashcraft.customitem.items.BeastScroll;
 
 import java.util.UUID;
 
@@ -92,6 +93,14 @@ public class DamageListener implements Listener {
                     case MACE -> 15;
                     default -> 2;
                 };
+
+                // reduce Beast Scroll cooldown if it's on cooldown
+                BeastScroll beastScroll = Smashcraft.getInstance()
+                        .getCustomItemManager()
+                        .getItemByClass(BeastScroll.class);
+                if (beastScroll != null) {
+                    beastScroll.reduceCooldown(attacker, 1);
+                }
             }
 
             spawnHitEffect(victim.getLocation());
@@ -109,6 +118,23 @@ public class DamageListener implements Listener {
             damagePercent = 15;
             applySmashKnockback(sourceLoc, null, victim, damagePercent);
             event.setDamage(0);
+        } else if (event.getDamager() instanceof LivingEntity mob) {
+            // Mob melee attacks
+            sourceLoc = mob.getLocation();
+
+            damagePercent = 10.0;
+            applySmashKnockback(sourceLoc, null, victim, damagePercent);
+            event.setDamage(0);
+        } else if (event.getDamager() instanceof Projectile projectile) {
+            if (projectile.getType() == EntityType.WIND_CHARGE &&
+                    projectile.getShooter() instanceof LivingEntity shooter) {
+
+                sourceLoc = shooter.getLocation();
+
+                damagePercent = 5.0;
+                applySmashKnockback(sourceLoc, null, victim, damagePercent);
+                event.setDamage(0);
+            }
         }
     }
 
